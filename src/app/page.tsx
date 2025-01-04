@@ -1,4 +1,4 @@
-import { LogoutButton } from "@/features/auth/components/logout-button"
+import LogoutButton from "@/features/auth/components/logout-button"
 import { get2FARedirect } from "@/features/auth/lib/server/2fa"
 import { globalGETRateLimit } from "@/features/auth/lib/server/request"
 import { getCurrentSession } from "@/features/auth/lib/server/session"

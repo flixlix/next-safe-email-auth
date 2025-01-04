@@ -1,4 +1,4 @@
-import { TwoFactorSetUpForm } from "@/features/auth/2fa/totp/setup/components"
+import TwoFactorSetUpForm from "@/features/auth/2fa/totp/setup/components/form"
 import { get2FARedirect } from "@/features/auth/lib/server/2fa"
 import { globalGETRateLimit } from "@/features/auth/lib/server/request"
 import { getCurrentSession } from "@/features/auth/lib/server/session"
@@ -28,19 +28,5 @@ export default async function Page() {
   const encodedTOTPKey = encodeBase64(totpKey)
   const keyURI = createTOTPKeyURI("Demo", user.username, totpKey, 30, 6)
   const qrcode = renderSVG(keyURI)
-  return (
-    <>
-      <h1>Set up authenticator app</h1>
-      <div
-        style={{
-          width: "200px",
-          height: "200px",
-        }}
-        dangerouslySetInnerHTML={{
-          __html: qrcode,
-        }}
-      ></div>
-      <TwoFactorSetUpForm encodedTOTPKey={encodedTOTPKey} />
-    </>
-  )
+  return <TwoFactorSetUpForm qrcode={qrcode} encodedTOTPKey={encodedTOTPKey} />
 }

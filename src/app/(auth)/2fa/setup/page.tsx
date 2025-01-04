@@ -1,5 +1,7 @@
+import { Button } from "@/components/ui/button"
 import { globalGETRateLimit } from "@/features/auth/lib/server/request"
 import { getCurrentSession } from "@/features/auth/lib/server/session"
+import { BookCheck, KeyRound, Smartphone } from "lucide-react"
 import Link from "next/link"
 import { redirect } from "next/navigation"
 
@@ -19,19 +21,37 @@ export default async function Page() {
     return redirect("/")
   }
   return (
-    <>
-      <h1>Set up two-factor authentication</h1>
-      <ul>
+    <div className="flex flex-col gap-6">
+      <div className="flex flex-col items-start text-start">
+        <h1 className="text-2xl font-bold">Set up two-factor authentication</h1>
+        <p className="text-balance text-muted-foreground">Choose a method to secure your account.</p>
+      </div>
+      <ul className="flex flex-col gap-4">
         <li>
-          <Link href="/2fa/totp/setup">Authenticator apps</Link>
+          <Button className="w-full" variant="outline" asChild>
+            <Link href="/2fa/totp/setup">
+              <Smartphone />
+              Authenticator apps
+            </Link>
+          </Button>
         </li>
         <li>
-          <Link href="/2fa/passkey/register">Passkeys</Link>
+          <Button className="w-full" variant="outline" asChild>
+            <Link href="/2fa/passkey/register">
+              <BookCheck />
+              Passkeys
+            </Link>
+          </Button>
         </li>
         <li>
-          <Link href="/2fa/security-key/register">Security keys</Link>
+          <Button className="w-full" variant="outline" asChild>
+            <Link href="/2fa/security-key/register">
+              <KeyRound />
+              Security keys
+            </Link>
+          </Button>
         </li>
       </ul>
-    </>
+    </div>
   )
 }

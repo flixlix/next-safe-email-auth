@@ -7,7 +7,7 @@ const initialState = {
   message: "",
 }
 
-export function LogoutButton() {
+export default function LogoutButton() {
   const [, action] = useActionState(logoutAction, initialState)
   return (
     <form action={action}>

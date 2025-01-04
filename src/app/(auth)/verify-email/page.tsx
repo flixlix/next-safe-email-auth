@@ -24,11 +24,14 @@ export default async function Page() {
   }
   return (
     <>
-      <h1>Verify your email address</h1>
-      <p>We sent an 8-digit code to {verificationRequest?.email ?? user.email}.</p>
-      <EmailVerificationForm />
+      <EmailVerificationForm verificationRequest={verificationRequest} user={user} />
       <ResendEmailVerificationCodeForm />
-      <Link href="/settings">Change your email</Link>
+      <div className="mt-2 text-sm">
+        Want to use another address?{" "}
+        <Link href="/settings" className="underline underline-offset-4">
+          Change your email
+        </Link>
+      </div>
     </>
   )
 }

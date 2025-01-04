@@ -2,7 +2,6 @@ import { get2FARedirect } from "@/features/auth/lib/server/2fa"
 import { globalGETRateLimit } from "@/features/auth/lib/server/request"
 import { getCurrentSession } from "@/features/auth/lib/server/session"
 import LoginForm from "@/features/auth/login/components/form"
-import Link from "next/link"
 import { redirect } from "next/navigation"
 
 export default async function Page() {
@@ -23,12 +22,5 @@ export default async function Page() {
     }
     return redirect("/")
   }
-  return (
-    <>
-      <h1>Sign in</h1>
-      <LoginForm />
-      <Link href="/signup">Create an account</Link>
-      <Link href="/forgot-password">Forgot password?</Link>
-    </>
-  )
+  return <LoginForm />
 }

@@ -5,6 +5,7 @@ export const env = createEnv({
   emptyStringAsUndefined: true,
   server: {
     DATABASE_URL: z.string().url(),
+    ENCRYPTION_KEY: z.string(),
   },
   experimental__runtimeEnv: process.env,
 })

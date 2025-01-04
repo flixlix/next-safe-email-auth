@@ -58,7 +58,7 @@ export async function signupAction(_prev: ActionResult, formData: FormData): Pro
       message: "Email is already used",
     }
   }
-  if (!(await verifyUsernameInput(username))) {
+  if (!verifyUsernameInput(username)) {
     return {
       message: "Invalid username",
     }

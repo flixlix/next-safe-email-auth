@@ -20,10 +20,7 @@ export async function createUser(email: string, username: string, password: stri
   const passwordHash = await hashPassword(password)
   const recoveryCode = generateRandomRecoveryCode()
   const encryptedRecoveryCode = encryptString(recoveryCode)
-  //   const row = db.queryOne(
-  //     "INSERT INTO user (email, username, password_hash, recovery_code) VALUES (?, ?, ?, ?) RETURNING user.id",
-  //     [email, username, passwordHash, encryptedRecoveryCode]
-  //   )
+
   const userId = generateIdFromEntropySize(10)
   const result = await db
     .insert(userTable)
@@ -34,7 +31,9 @@ export async function createUser(email: string, username: string, password: stri
       passwordHash,
       recoveryCode: Buffer.from(encryptedRecoveryCode),
     })
-    .returning()
+    .returning({
+      id: userTable.id,
+    })
   const row = result[0]
   if (row === null || row === undefined) {
     throw new Error("Unexpected error")

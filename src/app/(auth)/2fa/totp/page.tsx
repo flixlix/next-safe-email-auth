@@ -1,8 +1,7 @@
-import Link from "next/link"
-
-import { TwoFactorVerificationForm } from "@/features/auth/2fa/totp/components"
+import TwoFactorVerificationForm from "@/features/auth/2fa/totp/components/form"
 import { globalGETRateLimit } from "@/features/auth/lib/server/request"
 import { getCurrentSession } from "@/features/auth/lib/server/session"
+import Link from "next/link"
 import { redirect } from "next/navigation"
 
 export default async function Page() {

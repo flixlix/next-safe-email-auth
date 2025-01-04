@@ -9,17 +9,7 @@ export function verifyEmailInput(email: string): boolean {
 }
 
 export async function checkEmailAvailability(email: string): Promise<boolean> {
-  const result = await db
-    .select({
-      count: db.$count(userTable.id),
-    })
-    .from(userTable)
-    .where(eq(userTable.email, email))
-    .limit(1)
+  const result = await db.select().from(userTable).where(eq(userTable.email, email))
 
-  const row = result[0]
-  if (row === null || row === undefined) {
-    throw new Error()
-  }
-  return row.count === 0
+  return result.length === 0
 }

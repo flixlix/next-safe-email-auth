@@ -100,9 +100,9 @@ export const getCurrentUserEmailVerificationRequest = cache(async () => {
   if (id === null) {
     return null
   }
-  const request = getUserEmailVerificationRequest(user.id, id)
+  const request = await getUserEmailVerificationRequest(user.id, id)
   if (request === null) {
-    deleteEmailVerificationRequestCookie()
+    await deleteEmailVerificationRequestCookie()
   }
   return request
 })

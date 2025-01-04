@@ -1,4 +1,4 @@
-import { TwoFactorResetForm } from "@/features/auth/2fa/reset/components"
+import TwoFactorResetForm from "@/features/auth/2fa/reset/components/form"
 import { globalGETRateLimit } from "@/features/auth/lib/server/request"
 import { getCurrentSession } from "@/features/auth/lib/server/session"
 import { redirect } from "next/navigation"

@@ -1,4 +1,4 @@
-import { Verify2FAWithSecurityKeyButton } from "@/features/auth/2fa/security-key/components"
+import Verify2FAWithSecurityKeyButton from "@/features/auth/2fa/security-key/components/verify-2fa-button"
 import { get2FARedirect } from "@/features/auth/lib/server/2fa"
 import { globalGETRateLimit } from "@/features/auth/lib/server/request"
 import { getCurrentSession } from "@/features/auth/lib/server/session"

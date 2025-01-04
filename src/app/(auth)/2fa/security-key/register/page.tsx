@@ -1,4 +1,4 @@
-import { RegisterSecurityKey } from "@/features/auth/2fa/security-key/register/components"
+import RegisterSecurityKey from "@/features/auth/2fa/security-key/register/components/register-key"
 import { get2FARedirect } from "@/features/auth/lib/server/2fa"
 import { globalGETRateLimit } from "@/features/auth/lib/server/request"
 import { getCurrentSession } from "@/features/auth/lib/server/session"

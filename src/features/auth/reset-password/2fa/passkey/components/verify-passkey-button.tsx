@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { verify2FAWithPasskeyAction } from "../actions/verify-passkey"
 
-export function Verify2FAWithPasskeyButton(props: { encodedCredentialIds: string[] }) {
+export default function Verify2FAWithPasskeyButton(props: { encodedCredentialIds: string[] }) {
   const router = useRouter()
   const [message, setMessage] = useState("")
   return (

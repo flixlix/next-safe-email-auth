@@ -1,8 +1,9 @@
+import { env } from "@/data/env/server"
 import { DynamicBuffer } from "@oslojs/binary"
 import { decodeBase64 } from "@oslojs/encoding"
 import { createCipheriv, createDecipheriv } from "crypto"
 
-const key = decodeBase64(process.env.ENCRYPTION_KEY ?? "")
+const key = decodeBase64(env.ENCRYPTION_KEY ?? "")
 
 export function encrypt(data: Uint8Array): Uint8Array {
   const iv = new Uint8Array(16)
