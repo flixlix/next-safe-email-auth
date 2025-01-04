@@ -4,7 +4,6 @@ import { eq } from "drizzle-orm"
 import { z } from "zod"
 
 export function verifyEmailInput(email: string): boolean {
-  //   return /^.+@.+\..+$/.test(email) && email.length < 256
   return z.string().email().max(255).safeParse(email).success
 }
 

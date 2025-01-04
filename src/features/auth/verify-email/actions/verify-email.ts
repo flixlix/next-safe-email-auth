@@ -80,9 +80,9 @@ export async function verifyEmailAction(_prev: ActionResult, formData: FormData)
   await updateUserEmailAndSetEmailAsVerified(user.id, verificationRequest.email)
   await deleteEmailVerificationRequestCookie()
   if (!user.registered2FA) {
-    return redirect("/2fa/setup")
+    redirect("/2fa/totp/setup")
   }
-  return redirect("/")
+  redirect("/")
 }
 
 interface ActionResult {

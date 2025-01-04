@@ -12,15 +12,15 @@ export default async function Page() {
   const { session, user } = await getCurrentSession()
   if (session !== null) {
     if (!user.emailVerified) {
-      return redirect("/verify-email")
+      redirect("/verify-email")
     }
     if (!user.registered2FA) {
-      return redirect("/2fa/setup")
+      redirect("/2fa/totp/setup")
     }
     if (!session.twoFactorVerified) {
-      return redirect(get2FARedirect(user))
+      redirect(get2FARedirect(user))
     }
-    return redirect("/")
+    redirect("/")
   }
   return <LoginForm />
 }

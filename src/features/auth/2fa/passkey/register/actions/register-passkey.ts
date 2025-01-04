@@ -213,9 +213,9 @@ export async function registerPasskeyAction(_prev: ActionResult, formData: FormD
   }
 
   if (!user.registered2FA) {
-    return redirect("/recovery-code")
+    redirect("/recovery-code")
   }
-  return redirect("/")
+  redirect("/")
 }
 
 interface ActionResult {

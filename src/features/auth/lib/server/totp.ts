@@ -20,7 +20,7 @@ export async function getUserTOTPKey(userId: User["id"]): Promise<Uint8Array | n
   if (encrypted === null) {
     return null
   }
-  return decrypt(Buffer.from(encrypted))
+  return decrypt(Buffer.from(encrypted.split(",").map((x: string) => parseInt(x))))
 }
 
 export async function updateUserTOTPKey(userId: User["id"], key: Uint8Array): Promise<boolean> {
@@ -32,10 +32,7 @@ export async function updateUserTOTPKey(userId: User["id"], key: Uint8Array): Pr
 
       const id = generateIdFromEntropySize(10)
 
-      await trx
-        .insert(totpCredentialTable)
-        .values({ id, userId, key: Buffer.from(encrypted) })
-        .execute()
+      await trx.insert(totpCredentialTable).values({ id, userId, key: encrypted.toString() }).execute()
     })
 
     return true

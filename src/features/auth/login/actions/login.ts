@@ -91,15 +91,15 @@ export async function loginAction(_prev: ActionResult, formData: FormData): Prom
   }
   const sessionToken = generateSessionToken()
   const session = await createSession(sessionToken, user.id, sessionFlags)
-  setSessionTokenCookie(sessionToken, session.expiresAt)
+  await setSessionTokenCookie(sessionToken, session.expiresAt)
 
   if (!user.emailVerified) {
-    return redirect("/verify-email")
+    redirect("/verify-email")
   }
   if (!user.registered2FA) {
-    return redirect("/2fa/setup")
+    redirect("/2fa/totp/setup")
   }
-  return redirect(get2FARedirect(user))
+  redirect(get2FARedirect(user))
 }
 
 export async function loginWithPasskeyAction(data: unknown): Promise<ActionResult> {
@@ -224,7 +224,7 @@ export async function loginWithPasskeyAction(data: unknown): Promise<ActionResul
   const sessionToken = generateSessionToken()
   const session = await createSession(sessionToken, credential.userId, sessionFlags)
   await setSessionTokenCookie(sessionToken, session.expiresAt)
-  return redirect("/")
+  redirect("/")
 }
 
 interface ActionResult {

@@ -19,6 +19,7 @@ export async function updatePasswordAction(_prev: ActionResult, formData: FormDa
   if (!globalPOSTRateLimit()) {
     return {
       message: "Too many requests",
+      error: true,
     }
   }
 
@@ -26,16 +27,19 @@ export async function updatePasswordAction(_prev: ActionResult, formData: FormDa
   if (session === null) {
     return {
       message: "Not authenticated",
+      error: true,
     }
   }
   if (user.registered2FA && !session.twoFactorVerified) {
     return {
       message: "Forbidden",
+      error: true,
     }
   }
   if (!passwordUpdateBucket.check(session.id, 1)) {
     return {
       message: "Too many requests",
+      error: true,
     }
   }
 
@@ -44,17 +48,20 @@ export async function updatePasswordAction(_prev: ActionResult, formData: FormDa
   if (typeof password !== "string" || typeof newPassword !== "string") {
     return {
       message: "Invalid or missing fields",
+      error: true,
     }
   }
   const strongPassword = await verifyPasswordStrength(newPassword)
   if (!strongPassword) {
     return {
       message: "Weak password",
+      error: true,
     }
   }
   if (!passwordUpdateBucket.consume(session.id, 1)) {
     return {
       message: "Too many requests",
+      error: true,
     }
   }
   const passwordHash = await getUserPasswordHash(user.id)
@@ -62,6 +69,7 @@ export async function updatePasswordAction(_prev: ActionResult, formData: FormDa
   if (!validPassword) {
     return {
       message: "Incorrect password",
+      error: true,
     }
   }
   passwordUpdateBucket.reset(session.id)
@@ -76,9 +84,11 @@ export async function updatePasswordAction(_prev: ActionResult, formData: FormDa
   await setSessionTokenCookie(sessionToken, newSession.expiresAt)
   return {
     message: "Updated password",
+    error: false,
   }
 }
 
 interface ActionResult {
   message: string
+  error: boolean
 }

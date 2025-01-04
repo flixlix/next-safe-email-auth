@@ -14,19 +14,19 @@ export default async function Page() {
 
   const { session, user } = await getCurrentSession()
   if (session === null || user === null) {
-    return redirect("/login")
+    redirect("/login")
   }
   if (!user.emailVerified) {
-    return redirect("/verify-email")
+    redirect("/verify-email")
   }
   if (!user.registered2FA) {
-    return redirect("/")
+    redirect("/")
   }
   if (session.twoFactorVerified) {
-    return redirect("/")
+    redirect("/")
   }
   if (!user.registeredPasskey) {
-    return redirect(get2FARedirect(user))
+    redirect(get2FARedirect(user))
   }
   const credentials = await getUserPasskeyCredentials(user.id)
   return (

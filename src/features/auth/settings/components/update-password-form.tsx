@@ -3,11 +3,13 @@
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { cn } from "@/lib/utils"
 import { useActionState } from "react"
 import { updatePasswordAction } from "../actions/update-password"
 
 const initialUpdatePasswordState = {
   message: "",
+  error: true,
 }
 
 export default function UpdatePasswordForm() {
@@ -33,7 +35,9 @@ export default function UpdatePasswordForm() {
       <Button disabled={pending} type="submit" className="me-auto">
         Update
       </Button>
-      <p className="text-sm font-medium text-destructive">{state.message}</p>
+      {state.message ? (
+        <p className={cn("text-sm font-medium", state.error && "text-destructive")}>{state.message}</p>
+      ) : null}
     </form>
   )
 }

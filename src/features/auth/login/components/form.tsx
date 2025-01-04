@@ -39,7 +39,7 @@ export default function LoginForm() {
         <Button disabled={pending} type="submit" className="w-full">
           Login
         </Button>
-        <p className="text-sm font-medium text-destructive">{state.message}</p>
+        {state.message ? <p className="text-sm font-medium text-destructive">{state.message}</p> : null}
         <div className="text-center text-sm">
           Don&apos;t have an account?{" "}
           <Link href="/signup" className="underline underline-offset-4">

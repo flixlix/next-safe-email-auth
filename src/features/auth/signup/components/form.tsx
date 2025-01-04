@@ -39,7 +39,7 @@ export default function SignUpForm() {
         <Button disabled={pending} type="submit" className="w-full">
           Continue
         </Button>
-        <p className="text-sm font-medium text-destructive">{state.message}</p>
+        {state.message ? <p className="text-sm font-medium text-destructive">{state.message}</p> : null}
         <div className="text-center text-sm">
           Already have an account?{" "}
           <Link href="/login" className="underline underline-offset-4">

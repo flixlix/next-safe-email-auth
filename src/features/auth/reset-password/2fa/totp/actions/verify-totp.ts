@@ -65,7 +65,7 @@ export async function verifyPasswordReset2FAWithTOTPAction(
   }
   totpBucket.reset(session.userId)
   await setPasswordResetSessionAs2FAVerified(session.id)
-  return redirect("/reset-password")
+  redirect("/reset-password")
 }
 
 interface ActionResult {

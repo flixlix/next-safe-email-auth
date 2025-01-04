@@ -55,7 +55,7 @@ export async function verifyPasswordReset2FAWithRecoveryCodeAction(
     }
   }
   recoveryCodeBucket.reset(session.userId)
-  return redirect("/reset-password")
+  redirect("/reset-password")
 }
 
 interface ActionResult {

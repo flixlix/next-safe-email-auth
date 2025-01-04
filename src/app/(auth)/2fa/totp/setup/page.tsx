@@ -2,6 +2,7 @@ import TwoFactorSetUpForm from "@/features/auth/2fa/totp/setup/components/form"
 import { get2FARedirect } from "@/features/auth/lib/server/2fa"
 import { globalGETRateLimit } from "@/features/auth/lib/server/request"
 import { getCurrentSession } from "@/features/auth/lib/server/session"
+import { generateRandomOTP } from "@/features/auth/lib/server/utils"
 import { encodeBase64 } from "@oslojs/encoding"
 import { createTOTPKeyURI } from "@oslojs/otp"
 import { redirect } from "next/navigation"
@@ -14,19 +15,19 @@ export default async function Page() {
 
   const { session, user } = await getCurrentSession()
   if (session === null) {
-    return redirect("/login")
+    redirect("/login")
   }
   if (!user.emailVerified) {
-    return redirect("/verify-email")
+    redirect("/verify-email")
   }
   if (user.registered2FA && !session.twoFactorVerified) {
-    return redirect(get2FARedirect(user))
+    redirect(get2FARedirect(user))
   }
 
   const totpKey = new Uint8Array(20)
   crypto.getRandomValues(totpKey)
   const encodedTOTPKey = encodeBase64(totpKey)
-  const keyURI = createTOTPKeyURI("Demo", user.username, totpKey, 30, 6)
+  const keyURI = createTOTPKeyURI(generateRandomOTP(), user.username, totpKey, 30, 6)
   const qrcode = renderSVG(keyURI)
   return <TwoFactorSetUpForm qrcode={qrcode} encodedTOTPKey={encodedTOTPKey} />
 }

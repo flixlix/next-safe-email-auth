@@ -63,7 +63,7 @@ export async function verifyPasswordResetEmailAction(_prev: ActionResult, formDa
       message: "Please restart the process",
     }
   }
-  return redirect("/reset-password/2fa")
+  redirect("/reset-password/2fa")
 }
 
 interface ActionResult {

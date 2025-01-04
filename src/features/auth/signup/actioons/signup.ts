@@ -85,7 +85,7 @@ export async function signupAction(_prev: ActionResult, formData: FormData): Pro
   const sessionToken = generateSessionToken()
   const session = await createSession(sessionToken, user.id, sessionFlags)
   await setSessionTokenCookie(sessionToken, session.expiresAt)
-  return redirect("/2fa/setup")
+  redirect("/2fa/totp/setup")
 }
 
 interface ActionResult {

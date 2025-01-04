@@ -1,4 +1,3 @@
-import { bytea } from "@/drizzle/custom-types"
 import { userTable } from "@/drizzle/schema"
 import { pgTable } from "@/drizzle/table-creator"
 import { boolean, integer, text, timestamp } from "drizzle-orm/pg-core"
@@ -56,7 +55,7 @@ export const totpCredentialTable = pgTable("totp_credential", {
   userId: text("user_id")
     .notNull()
     .references(() => userTable.id, { onDelete: "cascade" }),
-  key: bytea().notNull(),
+  key: text().notNull(),
 })
 
 export const insertTotpCredentialSchema = createInsertSchema(totpCredentialTable)
@@ -68,13 +67,13 @@ export type TotpCredential = z.infer<typeof totpCredentialSchema>
 /* -- PASSKEY CREDENTIAL -- */
 
 export const passkeyCredentialTable = pgTable("passkey_credential", {
-  id: bytea("id").primaryKey().notNull(),
+  id: text("id").primaryKey().notNull(),
   userId: text("user_id")
     .notNull()
     .references(() => userTable.id, { onDelete: "cascade" }),
   name: text().notNull(),
   algorithm: integer().notNull(),
-  publicKey: bytea("public_key").notNull(),
+  publicKey: text("public_key").notNull(),
 })
 
 export const insertPasskeyCredentialSchema = createInsertSchema(passkeyCredentialTable)
@@ -86,13 +85,13 @@ export type PasskeyCredential = z.infer<typeof passkeyCredentialSchema>
 /* -- SECURITY KEY CREDENTIAL -- */
 
 export const securityKeyCredentialTable = pgTable("security_key_credential", {
-  id: bytea("id").primaryKey().notNull(),
+  id: text("id").primaryKey().notNull(),
   userId: text("user_id")
     .notNull()
     .references(() => userTable.id, { onDelete: "cascade" }),
   name: text().notNull(),
   algorithm: integer().notNull(),
-  publicKey: bytea("public_key").notNull(),
+  publicKey: text("public_key").notNull(),
 })
 
 export const insertSecurityKeyCredentialSchema = createInsertSchema(securityKeyCredentialTable)

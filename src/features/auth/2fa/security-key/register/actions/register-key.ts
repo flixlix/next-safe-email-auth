@@ -213,9 +213,9 @@ export async function registerSecurityKeyAction(_prev: ActionResult, formData: F
   }
 
   if (!user.registered2FA) {
-    return redirect("/recovery-code")
+    redirect("/recovery-code")
   }
-  return redirect("/")
+  redirect("/")
 }
 
 interface ActionResult {

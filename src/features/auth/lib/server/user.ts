@@ -8,7 +8,7 @@ import {
   type User as DBUser,
 } from "@/drizzle/schema"
 import { and, eq, sql } from "drizzle-orm"
-import { encryptString } from "./encryption"
+import { decryptToString, encryptString } from "./encryption"
 import { hashPassword } from "./password"
 import { generateRandomRecoveryCode } from "./utils"
 
@@ -86,11 +86,7 @@ export async function getUserRecoverCode(userId: User["id"]): Promise<string> {
       throw new Error("Invalid user ID or recovery code not found")
     }
 
-    console.log(result[0]) // Log the full result
-    console.log(result[0].recoveryCode) // Log the recoveryCode specifically
-
-    // Assuming you want to return the recoveryCode as a string
-    return result[0].recoveryCode.toString() // Ensure it's converted if necessary
+    return decryptToString(Buffer.from(result[0].recoveryCode.split(",").map((x: string) => parseInt(x))))
   } catch (error) {
     console.error("Error fetching recovery code:", error)
     return ""

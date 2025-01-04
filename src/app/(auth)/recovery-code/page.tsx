@@ -1,5 +1,6 @@
 import Link from "next/link"
 
+import { Button } from "@/components/ui/button"
 import { get2FARedirect } from "@/features/auth/lib/server/2fa"
 import { globalGETRateLimit } from "@/features/auth/lib/server/request"
 import { getCurrentSession } from "@/features/auth/lib/server/session"
@@ -13,24 +14,33 @@ export default async function Page() {
 
   const { session, user } = await getCurrentSession()
   if (session === null) {
-    return redirect("/login")
+    redirect("/login")
   }
   if (!user.emailVerified) {
-    return redirect("/verify-email")
+    redirect("/verify-email")
   }
   if (!user.registered2FA) {
-    return redirect("/2fa/setup")
+    redirect("/2fa/totp/setup")
   }
   if (!session.twoFactorVerified) {
-    return redirect(get2FARedirect(user))
+    redirect(get2FARedirect(user))
   }
   const recoveryCode = await getUserRecoverCode(user.id)
   return (
-    <>
-      <h1>Recovery code</h1>
-      <p>Your recovery code is: {recoveryCode}</p>
-      <p>You can use this recovery code if you lose access to your second factors.</p>
-      <Link href="/">Next</Link>
-    </>
+    <div className="flex flex-col gap-6">
+      <div className="flex flex-col items-start text-start">
+        <h1 className="text-2xl font-bold">Recovery code</h1>
+        <p className="text-balance text-muted-foreground">
+          You can use this recovery code if you lose access to your second factors.
+        </p>
+      </div>
+      <div className="grid gap-2">
+        <p>Your recovery code is:</p>
+        <code className="bg-muted p-2 font-mono text-sm text-muted-foreground">{recoveryCode}</code>
+      </div>
+      <Button className="w-full" asChild>
+        <Link href="/">Finish</Link>
+      </Button>
+    </div>
   )
 }

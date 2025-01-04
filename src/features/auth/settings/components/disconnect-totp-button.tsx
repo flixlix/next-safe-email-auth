@@ -15,7 +15,7 @@ export default function DisconnectTOTPButton() {
       <Button disabled={pending} type="submit" variant="destructive">
         Disconnect
       </Button>
-      <p className="text-sm font-medium text-destructive">{state.message}</p>
+      {state.message ? <p className="text-sm font-medium text-destructive">{state.message}</p> : null}
     </form>
   )
 }

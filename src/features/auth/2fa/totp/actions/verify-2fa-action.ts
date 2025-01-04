@@ -59,7 +59,7 @@ export async function verify2FAAction(_prev: ActionResult, formData: FormData): 
   }
   totpBucket.reset(user.id)
   await setSessionAs2FAVerified(session.id)
-  return redirect("/")
+  redirect("/")
 }
 
 interface ActionResult {

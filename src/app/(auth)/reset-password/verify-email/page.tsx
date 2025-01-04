@@ -10,13 +10,13 @@ export default async function Page() {
 
   const { session } = await getCurrentPasswordResetSession()
   if (session === null) {
-    return redirect("/forgot-password")
+    redirect("/forgot-password")
   }
   if (session.emailVerified) {
     if (!session.twoFactorVerified) {
-      return redirect("/reset-password/2fa")
+      redirect("/reset-password/2fa")
     }
-    return redirect("/reset-password")
+    redirect("/reset-password")
   }
   return (
     <>

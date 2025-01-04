@@ -15,6 +15,7 @@ export async function updateEmailAction(_prev: ActionResult, formData: FormData)
   if (!(await globalPOSTRateLimit())) {
     return {
       message: "Too many requests",
+      error: true,
     }
   }
 
@@ -22,50 +23,58 @@ export async function updateEmailAction(_prev: ActionResult, formData: FormData)
   if (session === null) {
     return {
       message: "Not authenticated",
+      error: true,
     }
   }
   if (user.registered2FA && !session.twoFactorVerified) {
     return {
       message: "Forbidden",
+      error: true,
     }
   }
   if (!sendVerificationEmailBucket.check(user.id, 1)) {
     return {
       message: "Too many requests",
+      error: true,
     }
   }
 
   const email = formData.get("email")
   if (typeof email !== "string") {
-    return { message: "Invalid or missing fields" }
+    return { message: "Invalid or missing fields", error: true }
   }
   if (email === "") {
     return {
       message: "Please enter your email",
+      error: true,
     }
   }
   if (!verifyEmailInput(email)) {
     return {
       message: "Please enter a valid email",
+      error: true,
     }
   }
   const emailAvailable = checkEmailAvailability(email)
   if (!emailAvailable) {
     return {
       message: "This email is already used",
+      error: true,
     }
   }
   if (!sendVerificationEmailBucket.consume(user.id, 1)) {
     return {
       message: "Too many requests",
+      error: true,
     }
   }
   const verificationRequest = await createEmailVerificationRequest(user.id, email)
   await sendVerificationEmail(verificationRequest.email, verificationRequest.code)
   await setEmailVerificationRequestCookie(verificationRequest)
-  return redirect("/verify-email")
+  redirect("/verify-email")
 }
 
 interface ActionResult {
   message: string
+  error: boolean
 }

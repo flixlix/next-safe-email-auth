@@ -52,7 +52,7 @@ export async function reset2FAAction(_prev: ActionResult, formData: FormData): P
     }
   }
   recoveryCodeBucket.reset(user.id)
-  return redirect("/2fa/setup")
+  redirect("/2fa/totp/setup")
 }
 
 interface ActionResult {

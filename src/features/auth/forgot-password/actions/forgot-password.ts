@@ -67,7 +67,7 @@ export async function forgotPasswordAction(_prev: ActionResult, formData: FormDa
 
   await sendPasswordResetEmail(session.email, session.code)
   await setPasswordResetSessionTokenCookie(sessionToken, session.expiresAt)
-  return redirect("/reset-password/verify-email")
+  redirect("/reset-password/verify-email")
 }
 
 interface ActionResult {

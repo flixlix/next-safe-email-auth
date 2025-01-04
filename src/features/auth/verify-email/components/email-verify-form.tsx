@@ -5,7 +5,7 @@ import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp
 import { Label } from "@/components/ui/label"
 import { type EmailVerificationRequest } from "@/drizzle/schema"
 import { REGEXP_ONLY_DIGITS_AND_CHARS } from "input-otp"
-import { useActionState } from "react"
+import { useActionState, useRef } from "react"
 import { type User } from "../../lib/server/user"
 import { verifyEmailAction } from "../actions/verify-email"
 
@@ -20,9 +20,11 @@ export default function EmailVerificationForm({
   verificationRequest: EmailVerificationRequest | null
   user: User
 }) {
+  const formRef = useRef<HTMLFormElement>(null)
   const [state, action, pending] = useActionState(verifyEmailAction, emailVerificationInitialState)
+
   return (
-    <form action={action}>
+    <form action={action} ref={formRef}>
       <div className="mb-4 flex flex-col gap-6">
         <div className="flex flex-col items-start text-start">
           <h1 className="text-2xl font-bold">Verify your email address</h1>
@@ -32,8 +34,14 @@ export default function EmailVerificationForm({
         </div>
         <div className="grid justify-center gap-2">
           <Label htmlFor="form-verify.code">Code</Label>
-
-          <InputOTP id="form-verify.code" name="code" maxLength={8} required pattern={REGEXP_ONLY_DIGITS_AND_CHARS}>
+          <InputOTP
+            id="form-verify.code"
+            name="code"
+            maxLength={8}
+            required
+            pattern={REGEXP_ONLY_DIGITS_AND_CHARS}
+            onComplete={() => formRef.current?.requestSubmit()}
+          >
             <InputOTPGroup>
               <InputOTPSlot index={0} />
               <InputOTPSlot index={1} />
@@ -49,7 +57,7 @@ export default function EmailVerificationForm({
         <Button disabled={pending} type="submit" className="w-full">
           Verify
         </Button>
-        <p className="text-sm font-medium text-destructive">{state.message}</p>
+        {state.message ? <p className="text-sm font-medium text-destructive">{state.message}</p> : null}
       </div>
     </form>
   )

@@ -83,9 +83,9 @@ export async function setup2FAAction(_prev: ActionResult, formData: FormData): P
   await updateUserTOTPKey(session.userId, key)
   await setSessionAs2FAVerified(session.id)
   if (!user.registered2FA) {
-    return redirect("/recovery-code")
+    redirect("/recovery-code")
   }
-  return redirect("/")
+  redirect("/")
 }
 
 interface ActionResult {

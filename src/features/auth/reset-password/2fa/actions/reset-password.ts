@@ -66,7 +66,7 @@ export async function resetPasswordAction(_prev: ActionResult, formData: FormDat
   const session = await createSession(sessionToken, user.id, sessionFlags)
   await setSessionTokenCookie(sessionToken, session.expiresAt)
   await deletePasswordResetSessionTokenCookie()
-  return redirect("/")
+  redirect("/")
 }
 
 interface ActionResult {

@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button"
 import { globalGETRateLimit } from "@/features/auth/lib/server/request"
 import { getCurrentSession } from "@/features/auth/lib/server/session"
-import { BookCheck, KeyRound, Smartphone } from "lucide-react"
+import { Smartphone } from "lucide-react"
 import Link from "next/link"
 import { redirect } from "next/navigation"
 
@@ -12,14 +12,15 @@ export default async function Page() {
 
   const { session, user } = await getCurrentSession()
   if (session === null || user === null) {
-    return redirect("/login")
+    redirect("/login")
   }
   if (!user.emailVerified) {
-    return redirect("/verify-email")
+    redirect("/verify-email")
   }
   if (user.registered2FA) {
-    return redirect("/")
+    redirect("/")
   }
+  redirect("/2fa/totp/setup")
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-col items-start text-start">
@@ -35,7 +36,7 @@ export default async function Page() {
             </Link>
           </Button>
         </li>
-        <li>
+        {/* <li>
           <Button className="w-full" variant="outline" asChild>
             <Link href="/2fa/passkey/register">
               <BookCheck />
@@ -50,7 +51,7 @@ export default async function Page() {
               Security keys
             </Link>
           </Button>
-        </li>
+        </li> */}
       </ul>
     </div>
   )

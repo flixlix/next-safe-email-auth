@@ -22,10 +22,10 @@ export default async function Page() {
 
   const { session, user } = await getCurrentSession()
   if (session === null) {
-    return redirect("/login")
+    redirect("/login")
   }
   if (user.registered2FA && !session.twoFactorVerified) {
-    return redirect(get2FARedirect(user))
+    redirect(get2FARedirect(user))
   }
   let recoveryCode: string | null = null
   if (user.registered2FA) {
