@@ -1,0 +1,1 @@
+# Next safe email auth
