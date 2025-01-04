@@ -51,7 +51,7 @@ CREATE TABLE "next-safe-email-auth_user" (
 	"username" text NOT NULL,
 	"passwordHash" text NOT NULL,
 	"emailVerified" boolean DEFAULT false NOT NULL,
-	"recoveryCode" "bytea" NOT NULL,
+	"recoveryCode" text NOT NULL,
 	CONSTRAINT "next-safe-email-auth_user_email_unique" UNIQUE("email")
 );
 --> statement-breakpoint

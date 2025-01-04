@@ -46,7 +46,7 @@ export async function getPasskeyCredential(credentialId: Uint8Array): Promise<We
     return null
   }
   const credential: WebAuthnUserCredential = {
-    id: row.id,
+    id: Buffer.from(row.id),
     userId: row.userId,
     name: row.name,
     algorithmId: row.algorithm,
@@ -91,7 +91,7 @@ export async function createPasskeyCredential(credential: WebAuthnUserCredential
 export async function deleteUserPasskeyCredential(userId: User["id"], credentialId: Uint8Array): Promise<boolean> {
   const result = await db
     .delete(passkeyCredentialTable)
-    .where(and(eq(passkeyCredentialTable.id, credentialId.toString()), eq(passkeyCredentialTable.userId, userId)))
+    .where(and(eq(passkeyCredentialTable.id, Buffer.from(credentialId)), eq(passkeyCredentialTable.userId, userId)))
     .returning()
   return result.length > 0
 }
@@ -100,11 +100,11 @@ export async function getUserSecurityKeyCredentials(userId: User["id"]): Promise
   const rows = await db.select().from(securityKeyCredentialTable).where(eq(securityKeyCredentialTable.userId, userId))
 
   return rows.map((row) => ({
-    id: Buffer.from(row.id),
+    id: row.id,
     userId: row.userId,
     name: row.name,
     algorithmId: row.algorithm,
-    publicKey: Buffer.from(row.publicKey),
+    publicKey: row.publicKey,
   }))
 }
 

@@ -16,6 +16,7 @@ export async function getUserTOTPKey(userId: User["id"]): Promise<Uint8Array | n
     throw new Error("Invalid user ID")
   }
   const encrypted = row.key
+
   if (encrypted === null) {
     return null
   }

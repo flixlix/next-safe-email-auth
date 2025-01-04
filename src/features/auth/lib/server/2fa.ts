@@ -37,9 +37,9 @@ export async function resetUser2FAWithRecoveryCode(userId: User["id"], recoveryC
       const updateResult = await trx
         .update(userTable)
         .set({
-          recoveryCode: Buffer.from(encryptedNewRecoveryCode),
+          recoveryCode: encryptedNewRecoveryCode.toString(),
         })
-        .where(and(eq(userTable.id, userId), eq(userTable.recoveryCode, encryptedRecoveryCode)))
+        .where(and(eq(userTable.id, userId), eq(userTable.recoveryCode, encryptedRecoveryCode.toString())))
         .execute()
 
       const updateRows = updateResult.rows

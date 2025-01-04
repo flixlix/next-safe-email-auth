@@ -1,4 +1,3 @@
-import { bytea } from "@/drizzle/custom-types"
 import { pgTable } from "@/drizzle/table-creator"
 import { boolean, text } from "drizzle-orm/pg-core"
 import { createInsertSchema, createSelectSchema } from "drizzle-zod"
@@ -10,7 +9,7 @@ export const userTable = pgTable("user", {
   username: text().notNull(),
   passwordHash: text().notNull(),
   emailVerified: boolean().notNull().default(false),
-  recoveryCode: bytea().notNull(),
+  recoveryCode: text().notNull(),
 })
 
 export const insertUserSchema = createInsertSchema(userTable)

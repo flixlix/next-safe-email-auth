@@ -1,6 +1,9 @@
+import { Button } from "@/components/ui/button"
+import { Separator } from "@/components/ui/separator"
 import TwoFactorVerificationForm from "@/features/auth/2fa/totp/components/form"
 import { globalGETRateLimit } from "@/features/auth/lib/server/request"
 import { getCurrentSession } from "@/features/auth/lib/server/session"
+import { Bandage, BookCheck, KeyRound } from "lucide-react"
 import Link from "next/link"
 import { redirect } from "next/navigation"
 
@@ -24,12 +27,30 @@ export default async function Page() {
   }
   return (
     <>
-      <h1>Authenticate with authenticator app</h1>
-      <p>Enter the code from your app.</p>
       <TwoFactorVerificationForm />
-      <Link href="/2fa/reset">Use recovery code</Link>
-      {user.registeredPasskey && <Link href="/2fa/passkey">Use passkeys</Link>}
-      {user.registeredSecurityKey && <Link href="/2fa/security-key">Use security keys</Link>}
+      <Separator className="mb-6" />
+      <Button asChild variant="outline" className="w-full">
+        <Link href="/2fa/reset">
+          <Bandage />
+          Use recovery code
+        </Link>
+      </Button>
+      {user.registeredPasskey && (
+        <Button asChild variant="outline" className="w-full">
+          <Link href="/2fa/passkey">
+            <BookCheck />
+            Use passkeys
+          </Link>
+        </Button>
+      )}
+      {user.registeredSecurityKey && (
+        <Button asChild variant="outline" className="w-full">
+          <Link href="/2fa/security-key">
+            <KeyRound />
+            Use security keys
+          </Link>
+        </Button>
+      )}
     </>
   )
 }

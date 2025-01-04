@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button"
 import { get2FARedirect } from "@/features/auth/lib/server/2fa"
 import { globalGETRateLimit } from "@/features/auth/lib/server/request"
 import { getCurrentSession } from "@/features/auth/lib/server/session"
@@ -10,6 +11,7 @@ import SecurityKeyCredentialListItem from "@/features/auth/settings/components/s
 import UpdateEmailForm from "@/features/auth/settings/components/update-email-form"
 import UpdatePasswordForm from "@/features/auth/settings/components/update-password-form"
 import { encodeBase64 } from "@oslojs/encoding"
+import { Plus } from "lucide-react"
 import Link from "next/link"
 import { redirect } from "next/navigation"
 
@@ -32,36 +34,42 @@ export default async function Page() {
   const passkeyCredentials = await getUserPasskeyCredentials(user.id)
   const securityKeyCredentials = await getUserSecurityKeyCredentials(user.id)
   return (
-    <>
-      <header>
+    <div className="container flex min-h-screen flex-col gap-6 py-8">
+      <header className="flex items-center justify-between">
         <Link href="/">Home</Link>
-        <Link href="/settings">Settings</Link>
       </header>
-      <main>
-        <h1>Settings</h1>
-        <section>
-          <h2>Update email</h2>
-          <p>Your email: {user.email}</p>
+      <main className="container flex max-w-screen-sm flex-col gap-6">
+        <h1 className="text-2xl font-bold">Settings</h1>
+
+        <section className="flex flex-col gap-4">
+          <h2 className="text-xl font-bold">Update email</h2>
+          <p className="text-muted-foreground">Your email: {user.email}</p>
           <UpdateEmailForm />
         </section>
-        <section>
-          <h2>Update password</h2>
+        <section className="flex flex-col gap-4">
+          <h2 className="text-xl font-bold">Update password</h2>
           <UpdatePasswordForm />
         </section>
-        <section>
-          <h2>Authenticator app</h2>
+        <section className="flex flex-col items-start gap-4">
+          <h2 className="text-xl font-bold">Authenticator app</h2>
           {user.registeredTOTP ? (
             <>
-              <Link href="/2fa/totp/setup">Update TOTP</Link>
+              <Button asChild>
+                <Link href="/2fa/totp/setup">Update TOTP</Link>
+              </Button>
               <DisconnectTOTPButton />
             </>
           ) : (
-            <Link href="/2fa/totp/setup">Set up TOTP</Link>
+            <Button asChild>
+              <Link href="/2fa/totp/setup">Set up TOTP</Link>
+            </Button>
           )}
         </section>
-        <section>
-          <h2>Passkeys</h2>
-          <p>Passkeys are WebAuthn credentials that validate your identity using your device.</p>
+        <section className="flex flex-col gap-4">
+          <h2 className="text-xl font-bold">Passkeys</h2>
+          <p className="text-muted-foreground">
+            Passkeys are WebAuthn credentials that validate your identity using your device.
+          </p>
           <ul>
             {passkeyCredentials.map((credential) => {
               return (
@@ -73,11 +81,18 @@ export default async function Page() {
               )
             })}
           </ul>
-          <Link href="/2fa/passkey/register">Add</Link>
+          <Button asChild className="me-auto">
+            <Link href="/2fa/passkey/register">
+              <Plus />
+              Add
+            </Link>
+          </Button>
         </section>
-        <section>
-          <h2>Security keys</h2>
-          <p>Security keys are WebAuthn credentials that can only be used for two-factor authentication.</p>
+        <section className="flex flex-col gap-4">
+          <h2 className="text-xl font-bold">Security keys</h2>
+          <p className="text-muted-foreground">
+            Security keys are WebAuthn credentials that can only be used for two-factor authentication.
+          </p>
           <ul>
             {securityKeyCredentials.map((credential) => {
               return (
@@ -89,10 +104,15 @@ export default async function Page() {
               )
             })}
           </ul>
-          <Link href="/2fa/security-key/register">Add</Link>
+          <Button asChild className="me-auto">
+            <Link href="/2fa/security-key/register">
+              <Plus />
+              Add
+            </Link>
+          </Button>
         </section>
         {recoveryCode !== null && <RecoveryCodeSection recoveryCode={recoveryCode} />}
       </main>
-    </>
+    </div>
   )
 }

@@ -1,5 +1,6 @@
 "use client"
 
+import { Button } from "@/components/ui/button"
 import { useActionState } from "react"
 import { logoutAction } from "../actions/logout"
 
@@ -8,10 +9,12 @@ const initialState = {
 }
 
 export default function LogoutButton() {
-  const [, action] = useActionState(logoutAction, initialState)
+  const [, action, pending] = useActionState(logoutAction, initialState)
   return (
     <form action={action}>
-      <button>Sign out</button>
+      <Button variant="destructive" disabled={pending}>
+        Sign out
+      </Button>
     </form>
   )
 }

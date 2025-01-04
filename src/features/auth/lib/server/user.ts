@@ -8,7 +8,7 @@ import {
   type User as DBUser,
 } from "@/drizzle/schema"
 import { and, eq, sql } from "drizzle-orm"
-import { decryptToString, encryptString } from "./encryption"
+import { encryptString } from "./encryption"
 import { hashPassword } from "./password"
 import { generateRandomRecoveryCode } from "./utils"
 
@@ -29,7 +29,7 @@ export async function createUser(email: string, username: string, password: stri
       email,
       username,
       passwordHash,
-      recoveryCode: Buffer.from(encryptedRecoveryCode),
+      recoveryCode: encryptedRecoveryCode.toString(),
     })
     .returning({
       id: userTable.id,
@@ -79,21 +79,28 @@ export async function getUserPasswordHash(userId: User["id"]): Promise<string> {
 }
 
 export async function getUserRecoverCode(userId: User["id"]): Promise<string> {
-  const result = await db.select().from(userTable).where(eq(userTable.id, userId)).limit(1)
-  const row = result[0]
-  if (row === null || row === undefined) {
-    throw new Error("Invalid user ID")
+  try {
+    const result = await db.select().from(userTable).where(eq(userTable.id, userId))
+
+    if (!result || result.length === 0) {
+      throw new Error("Invalid user ID or recovery code not found")
+    }
+
+    console.log(result[0]) // Log the full result
+    console.log(result[0].recoveryCode) // Log the recoveryCode specifically
+
+    // Assuming you want to return the recoveryCode as a string
+    return result[0].recoveryCode.toString() // Ensure it's converted if necessary
+  } catch (error) {
+    console.error("Error fetching recovery code:", error)
+    return ""
   }
-  return decryptToString(row.recoveryCode)
 }
 
 export async function resetUserRecoveryCode(userId: User["id"]): Promise<string> {
   const recoveryCode = generateRandomRecoveryCode()
   const encrypted = encryptString(recoveryCode)
-  await db
-    .update(userTable)
-    .set({ recoveryCode: Buffer.from(encrypted) })
-    .where(eq(userTable.id, userId))
+  await db.update(userTable).set({ recoveryCode: encrypted.toString() }).where(eq(userTable.id, userId))
   return recoveryCode
 }
 

@@ -1,7 +1,9 @@
+import { Button } from "@/components/ui/button"
 import LogoutButton from "@/features/auth/components/logout-button"
 import { get2FARedirect } from "@/features/auth/lib/server/2fa"
 import { globalGETRateLimit } from "@/features/auth/lib/server/request"
 import { getCurrentSession } from "@/features/auth/lib/server/session"
+import { Settings } from "lucide-react"
 import Link from "next/link"
 import { redirect } from "next/navigation"
 
@@ -24,15 +26,21 @@ export default async function Page() {
     return redirect(get2FARedirect(user))
   }
   return (
-    <>
-      <header>
+    <div className="container flex min-h-screen flex-col gap-6 py-8">
+      <header className="flex items-center justify-between">
         <Link href="/">Home</Link>
-        <Link href="/settings">Settings</Link>
+
+        <Button size="icon" variant="outline" asChild>
+          <Link href="/settings">
+            <span className="sr-only">Settings</span>
+            <Settings />
+          </Link>
+        </Button>
       </header>
-      <main>
-        <h1>Hi {user.username}!</h1>
+      <main className="flex flex-col gap-6">
+        <h1 className="text-2xl font-bold">Hi {user.username}!</h1>
         <LogoutButton />
       </main>
-    </>
+    </div>
   )
 }

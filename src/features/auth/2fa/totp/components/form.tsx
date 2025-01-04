@@ -1,5 +1,9 @@
 "use client"
 
+import { Button } from "@/components/ui/button"
+import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp"
+import { Label } from "@/components/ui/label"
+import { REGEXP_ONLY_DIGITS } from "input-otp"
 import { useActionState } from "react"
 import { verify2FAAction } from "../actions/verify-2fa-action"
 
@@ -8,14 +12,32 @@ const initial2FAVerificationState = {
 }
 
 export default function TwoFactorVerificationForm() {
-  const [state, action] = useActionState(verify2FAAction, initial2FAVerificationState)
+  const [state, action, pending] = useActionState(verify2FAAction, initial2FAVerificationState)
   return (
     <form action={action}>
-      <label htmlFor="form-totp.code">Code</label>
-      <input id="form-totp.code" name="code" autoComplete="one-time-code" required />
-      <br />
-      <button>Verify</button>
-      <p>{state.message}</p>
+      <div className="flex flex-col gap-6">
+        <div className="flex flex-col items-start text-start">
+          <h1 className="text-2xl font-bold">Authenticate with authenticator app</h1>
+          <p className="text-balance text-muted-foreground">Enter the code from your app.</p>
+        </div>
+        <div className="grid justify-center gap-2">
+          <Label htmlFor="form-totp.code">Code</Label>
+          <InputOTP id="form-totp.code" name="code" maxLength={6} required pattern={REGEXP_ONLY_DIGITS}>
+            <InputOTPGroup>
+              <InputOTPSlot index={0} />
+              <InputOTPSlot index={1} />
+              <InputOTPSlot index={2} />
+              <InputOTPSlot index={3} />
+              <InputOTPSlot index={4} />
+              <InputOTPSlot index={5} />
+            </InputOTPGroup>
+          </InputOTP>
+        </div>
+        <Button disabled={pending} type="submit" className="w-full">
+          Verify
+        </Button>
+        <p className="text-sm font-medium text-destructive">{state.message}</p>
+      </div>
     </form>
   )
 }

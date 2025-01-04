@@ -1,5 +1,6 @@
 "use client"
 
+import { Button } from "@/components/ui/button"
 import { useActionState } from "react"
 import { disconnectTOTPAction } from "../actions/disconnect-totp"
 
@@ -8,11 +9,13 @@ const initialDisconnectTOTPState = {
 }
 
 export default function DisconnectTOTPButton() {
-  const [state, formAction] = useActionState(disconnectTOTPAction, initialDisconnectTOTPState)
+  const [state, formAction, pending] = useActionState(disconnectTOTPAction, initialDisconnectTOTPState)
   return (
     <form action={formAction}>
-      <button>Disconnect</button>
-      <p>{state.message}</p>
+      <Button disabled={pending} type="submit" variant="destructive">
+        Disconnect
+      </Button>
+      <p className="text-sm font-medium text-destructive">{state.message}</p>
     </form>
   )
 }

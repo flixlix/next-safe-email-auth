@@ -1,5 +1,5 @@
 {
-  "id": "4987a3c6-50c1-4607-a707-a60e0440dcfb",
+  "id": "5ca0de13-44fc-4fee-a132-b5529f093b7a",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -380,7 +380,7 @@
         },
         "recoveryCode": {
           "name": "recoveryCode",
-          "type": "bytea",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         }
