@@ -10,10 +10,8 @@ export default function RecoveryCodeSection(props: { recoveryCode: string }) {
     <section className="flex flex-col gap-4">
       <h2 className="text-xl font-bold">Recovery code</h2>
       <p className="text-muted-foreground">
-        Your recovery code is:
-        <code className="max-w-full overflow-x-scroll bg-muted px-3 py-1 text-sm text-muted-foreground">
-          {recoveryCode}
-        </code>
+        Your recovery code is:{" "}
+        <code className="max-w-full overflow-x-scroll bg-muted p-1 text-sm text-muted-foreground">{recoveryCode}</code>
       </p>
       <Button
         className="me-auto"

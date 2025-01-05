@@ -45,9 +45,16 @@ export async function updatePasswordAction(_prev: ActionResult, formData: FormDa
 
   const password = formData.get("password")
   const newPassword = formData.get("new_password")
-  if (typeof password !== "string" || typeof newPassword !== "string") {
+  const newPasswordConfirm = formData.get("confirm_password")
+  if (typeof password !== "string" || typeof newPassword !== "string" || typeof newPasswordConfirm !== "string") {
     return {
       message: "Invalid or missing fields",
+      error: true,
+    }
+  }
+  if (newPassword !== newPasswordConfirm) {
+    return {
+      message: "Passwords do not match",
       error: true,
     }
   }

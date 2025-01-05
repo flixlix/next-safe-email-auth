@@ -19,7 +19,7 @@ export default function UpdatePasswordForm() {
     <form action={action} className="flex flex-col gap-6">
       <div className="grid gap-2">
         <Label htmlFor="form-password.password">Current password</Label>
-        <Input type="password" id="form-email.password" name="password" autoComplete="current-password" required />
+        <Input type="password" id="form-password.password" name="password" autoComplete="current-password" required />
       </div>
 
       <div className="grid gap-2">
@@ -28,6 +28,16 @@ export default function UpdatePasswordForm() {
           type="password"
           id="form-password.new-password"
           name="new_password"
+          autoComplete="new-password"
+          required
+        />
+      </div>
+      <div className="grid gap-2">
+        <Label htmlFor="form-password.confirm-password">Confirm password</Label>
+        <Input
+          type="password"
+          id="form-password.confirm-password"
+          name="confirm_password"
           autoComplete="new-password"
           required
         />
