@@ -9,7 +9,7 @@ export const userTable = pgTable("user", {
   username: text().notNull(),
   passwordHash: text().notNull(),
   emailVerified: boolean().notNull().default(false),
-  recoveryCode: text().notNull(),
+  recoveryCode: text("recovery_code").notNull(),
 })
 
 export const insertUserSchema = createInsertSchema(userTable)

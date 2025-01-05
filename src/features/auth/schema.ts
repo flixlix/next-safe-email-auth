@@ -1,6 +1,6 @@
 import { userTable } from "@/drizzle/schema"
 import { pgTable } from "@/drizzle/table-creator"
-import { boolean, integer, text, timestamp } from "drizzle-orm/pg-core"
+import { boolean, text, timestamp } from "drizzle-orm/pg-core"
 import { createInsertSchema, createSelectSchema } from "drizzle-zod"
 import { type z } from "zod"
 
@@ -63,39 +63,3 @@ export const totpCredentialSchema = createSelectSchema(totpCredentialTable)
 
 export type InsertTotpCredential = z.infer<typeof insertTotpCredentialSchema>
 export type TotpCredential = z.infer<typeof totpCredentialSchema>
-
-/* -- PASSKEY CREDENTIAL -- */
-
-export const passkeyCredentialTable = pgTable("passkey_credential", {
-  id: text("id").primaryKey().notNull(),
-  userId: text("user_id")
-    .notNull()
-    .references(() => userTable.id, { onDelete: "cascade" }),
-  name: text().notNull(),
-  algorithm: integer().notNull(),
-  publicKey: text("public_key").notNull(),
-})
-
-export const insertPasskeyCredentialSchema = createInsertSchema(passkeyCredentialTable)
-export const passkeyCredentialSchema = createSelectSchema(passkeyCredentialTable)
-
-export type InsertPasskeyCredential = z.infer<typeof insertPasskeyCredentialSchema>
-export type PasskeyCredential = z.infer<typeof passkeyCredentialSchema>
-
-/* -- SECURITY KEY CREDENTIAL -- */
-
-export const securityKeyCredentialTable = pgTable("security_key_credential", {
-  id: text("id").primaryKey().notNull(),
-  userId: text("user_id")
-    .notNull()
-    .references(() => userTable.id, { onDelete: "cascade" }),
-  name: text().notNull(),
-  algorithm: integer().notNull(),
-  publicKey: text("public_key").notNull(),
-})
-
-export const insertSecurityKeyCredentialSchema = createInsertSchema(securityKeyCredentialTable)
-export const securityKeyCredentialSchema = createSelectSchema(securityKeyCredentialTable)
-
-export type InsertSecurityKeyCredential = z.infer<typeof insertSecurityKeyCredentialSchema>
-export type SecurityKeyCredential = z.infer<typeof securityKeyCredentialSchema>

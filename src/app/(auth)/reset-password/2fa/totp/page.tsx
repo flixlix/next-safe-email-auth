@@ -33,8 +33,6 @@ export default async function Page() {
       <p>Enter the code from your app.</p>
       <PasswordResetTOTPForm />
       <Link href="/reset-password/2fa/recovery-code">Use recovery code</Link>
-      {user.registeredSecurityKey && <Link href="/reset-password/2fa/security-key">Use security keys</Link>}
-      {user.registeredPasskey && <Link href="/reset-password/2fa/passkey">Use passkeys</Link>}
     </>
   )
 }

@@ -32,26 +32,10 @@ export default async function Page() {
           <Button className="w-full" variant="outline" asChild>
             <Link href="/2fa/totp/setup">
               <Smartphone />
-              Authenticator apps
+              Authenticator app
             </Link>
           </Button>
         </li>
-        {/* <li>
-          <Button className="w-full" variant="outline" asChild>
-            <Link href="/2fa/passkey/register">
-              <BookCheck />
-              Passkeys
-            </Link>
-          </Button>
-        </li>
-        <li>
-          <Button className="w-full" variant="outline" asChild>
-            <Link href="/2fa/security-key/register">
-              <KeyRound />
-              Security keys
-            </Link>
-          </Button>
-        </li> */}
       </ul>
     </div>
   )

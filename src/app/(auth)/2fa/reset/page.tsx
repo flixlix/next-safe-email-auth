@@ -21,10 +21,5 @@ export default async function Page() {
   if (session.twoFactorVerified) {
     redirect("/")
   }
-  return (
-    <>
-      <h1>Recover your account</h1>
-      <TwoFactorResetForm />
-    </>
-  )
+  return <TwoFactorResetForm />
 }

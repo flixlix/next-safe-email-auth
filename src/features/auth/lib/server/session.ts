@@ -1,12 +1,5 @@
 import { db } from "@/drizzle/db"
-import {
-  passkeyCredentialTable,
-  securityKeyCredentialTable,
-  type Session,
-  sessionTable,
-  totpCredentialTable,
-  userTable,
-} from "@/drizzle/schema"
+import { type Session, sessionTable, totpCredentialTable, userTable } from "@/drizzle/schema"
 import { sha256 } from "@oslojs/crypto/sha2"
 import { encodeBase32LowerCaseNoPadding, encodeHexLowerCase } from "@oslojs/encoding"
 import { eq } from "drizzle-orm"
@@ -28,14 +21,10 @@ export async function validateSessionToken(token: string): Promise<SessionValida
       userUsername: userTable.username,
       userEmailVerified: userTable.emailVerified,
       registeredTOTP: totpCredentialTable.id,
-      registeredPasskey: passkeyCredentialTable.id,
-      registeredSecurityKey: securityKeyCredentialTable.id,
     })
     .from(sessionTable)
     .innerJoin(userTable, eq(sessionTable.userId, userTable.id))
     .leftJoin(totpCredentialTable, eq(userTable.id, totpCredentialTable.userId))
-    .leftJoin(passkeyCredentialTable, eq(userTable.id, passkeyCredentialTable.userId))
-    .leftJoin(securityKeyCredentialTable, eq(userTable.id, securityKeyCredentialTable.userId))
     .where(eq(sessionTable.id, sessionId))
     .limit(1)
   const row = result[0]
@@ -55,13 +44,10 @@ export async function validateSessionToken(token: string): Promise<SessionValida
     username: row.userUsername,
     emailVerified: row.userEmailVerified,
     registeredTOTP: Boolean(row.registeredTOTP),
-    registeredPasskey: Boolean(row.registeredPasskey),
-    registeredSecurityKey: Boolean(row.registeredSecurityKey),
     registered2FA: false,
   }
-  if (user.registeredPasskey || user.registeredSecurityKey || user.registeredTOTP) {
-    user.registered2FA = true
-  }
+  if (user.registeredTOTP) user.registered2FA = true
+
   if (Date.now() >= session.expiresAt.getTime()) {
     await db.delete(sessionTable).where(eq(sessionTable.id, sessionId))
     return { session: null, user: null }

@@ -5,13 +5,7 @@ import { encodeHexLowerCase } from "@oslojs/encoding"
 import { eq } from "drizzle-orm"
 import { cookies as nextCookies } from "next/headers"
 import { cache } from "react"
-import {
-  passkeyCredentialTable,
-  type PasswordResetSession,
-  passwordResetSessionTable,
-  securityKeyCredentialTable,
-  totpCredentialTable,
-} from "../../schema"
+import { type PasswordResetSession, passwordResetSessionTable, totpCredentialTable } from "../../schema"
 import type { User } from "./user"
 import { generateRandomOTP } from "./utils"
 
@@ -50,14 +44,10 @@ export async function validatePasswordResetSessionToken(token: string): Promise<
       userUsername: userTable.username,
       userEmailVerified: userTable.emailVerified,
       registeredTOTP: totpCredentialTable.id,
-      registeredPasskey: passkeyCredentialTable.id,
-      registeredSecurityKey: securityKeyCredentialTable.id,
     })
     .from(passwordResetSessionTable)
     .innerJoin(userTable, eq(passwordResetSessionTable.userId, userTable.id))
     .leftJoin(totpCredentialTable, eq(userTable.id, totpCredentialTable.userId))
-    .leftJoin(passkeyCredentialTable, eq(userTable.id, passkeyCredentialTable.userId))
-    .leftJoin(securityKeyCredentialTable, eq(userTable.id, securityKeyCredentialTable.userId))
     .where(eq(passwordResetSessionTable.id, sessionId))
     .limit(1)
 
@@ -81,14 +71,11 @@ export async function validatePasswordResetSessionToken(token: string): Promise<
     username: row.userUsername,
     emailVerified: Boolean(row.userEmailVerified),
     registeredTOTP: Boolean(row.registeredTOTP),
-    registeredPasskey: Boolean(row.registeredPasskey),
-    registeredSecurityKey: Boolean(row.registeredSecurityKey),
+
     registered2FA: false,
   }
 
-  if (user.registeredPasskey || user.registeredSecurityKey || user.registeredTOTP) {
-    user.registered2FA = true
-  }
+  if (user.registeredTOTP) user.registered2FA = true
 
   if (Date.now() >= session.expiresAt.getTime()) {
     await db.delete(passwordResetSessionTable).where(eq(passwordResetSessionTable.id, session.id))

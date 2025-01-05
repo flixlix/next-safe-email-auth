@@ -1,11 +1,5 @@
 import { db } from "@/drizzle/db"
-import {
-  passkeyCredentialTable,
-  securityKeyCredentialTable,
-  sessionTable,
-  totpCredentialTable,
-  userTable,
-} from "@/drizzle/schema"
+import { sessionTable, totpCredentialTable, userTable } from "@/drizzle/schema"
 import { and, eq, sql } from "drizzle-orm"
 import { decryptToString, encryptString } from "./encryption"
 import { ExpiringTokenBucket } from "./rate-limit"
@@ -17,14 +11,21 @@ export const recoveryCodeBucket = new ExpiringTokenBucket<User["id"]>(3, 60 * 60
 export async function resetUser2FAWithRecoveryCode(userId: User["id"], recoveryCode: string): Promise<boolean> {
   const trx = await db
     .transaction(async (trx) => {
-      const userResult = await trx.execute(sql`SELECT recovery_code FROM user WHERE id = ${userId} FOR UPDATE`)
+      const userResult = await trx.execute(
+        sql`SELECT recovery_code FROM "next-safe-email-auth_user" WHERE id = ${userId} FOR UPDATE`
+      )
+      console.log(
+        "%csrc/features/auth/lib/server/2fa.ts:17 userResult",
+        "color: white; background-color: #007acc;",
+        userResult
+      )
 
-      const userRow = userResult.rows as { recoveryCode: Buffer<ArrayBufferLike> }[]
+      const userRow = userResult.rows as { recovery_code: string }[]
       if (userRow.length === 0) {
         return false
       }
 
-      const encryptedRecoveryCode = Buffer.from(userRow[0].recoveryCode)
+      const encryptedRecoveryCode = Buffer.from(userRow[0]["recovery_code"].split(",").map((x: string) => parseInt(x)))
       const userRecoveryCode = decryptToString(encryptedRecoveryCode)
 
       if (recoveryCode !== userRecoveryCode) {
@@ -32,19 +33,17 @@ export async function resetUser2FAWithRecoveryCode(userId: User["id"], recoveryC
       }
 
       const newRecoveryCode = generateRandomRecoveryCode()
-      const encryptedNewRecoveryCode = encryptString(newRecoveryCode)
+      const newEncryptedRecoveryCode = encryptString(newRecoveryCode)
 
       const updateResult = await trx
         .update(userTable)
         .set({
-          recoveryCode: encryptedNewRecoveryCode.toString(),
+          recoveryCode: newEncryptedRecoveryCode.toString(),
         })
-        .where(and(eq(userTable.id, userId), eq(userTable.recoveryCode, encryptedRecoveryCode.toString())))
-        .execute()
+        .where(and(eq(userTable.id, userId), eq(userTable.recoveryCode, userRow[0]["recovery_code"])))
+        .returning()
 
-      const updateRows = updateResult.rows
-
-      if (updateRows.length === 0) {
+      if (updateResult.length === 0) {
         trx.rollback()
         return false
       }
@@ -52,8 +51,6 @@ export async function resetUser2FAWithRecoveryCode(userId: User["id"], recoveryC
       await trx.update(sessionTable).set({ twoFactorVerified: false }).where(eq(sessionTable.userId, userId)).execute()
 
       await trx.delete(totpCredentialTable).where(eq(totpCredentialTable.userId, userId)).execute()
-      await trx.delete(passkeyCredentialTable).where(eq(passkeyCredentialTable.userId, userId)).execute()
-      await trx.delete(securityKeyCredentialTable).where(eq(securityKeyCredentialTable.userId, userId)).execute()
 
       return true
     })
@@ -66,12 +63,6 @@ export async function resetUser2FAWithRecoveryCode(userId: User["id"], recoveryC
 }
 
 export function get2FARedirect(user: User): string {
-  if (user.registeredPasskey) {
-    return "/2fa/passkey"
-  }
-  if (user.registeredSecurityKey) {
-    return "/2fa/security-key"
-  }
   if (user.registeredTOTP) {
     return "/2fa/totp"
   }
@@ -79,12 +70,6 @@ export function get2FARedirect(user: User): string {
 }
 
 export function getPasswordReset2FARedirect(user: User): string {
-  if (user.registeredPasskey) {
-    return "/reset-password/2fa/passkey"
-  }
-  if (user.registeredSecurityKey) {
-    return "/reset-password/2fa/security-key"
-  }
   if (user.registeredTOTP) {
     return "/reset-password/2fa/totp"
   }

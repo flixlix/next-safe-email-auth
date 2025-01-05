@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button"
 import { useState } from "react"
-import { regenerateRecoveryCodeAction } from "../actions/regenerate-security-code"
+import { regenerateRecoveryCodeAction } from "../actions/regenerate-recovery-code"
 
 export default function RecoveryCodeSection(props: { recoveryCode: string }) {
   const [recoveryCode, setRecoveryCode] = useState(props.recoveryCode)

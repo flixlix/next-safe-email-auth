@@ -1,12 +1,6 @@
 import { generateIdFromEntropySize } from "@/auth"
 import { db } from "@/drizzle/db"
-import {
-  passkeyCredentialTable,
-  securityKeyCredentialTable,
-  totpCredentialTable,
-  userTable,
-  type User as DBUser,
-} from "@/drizzle/schema"
+import { totpCredentialTable, userTable, type User as DBUser } from "@/drizzle/schema"
 import { and, eq, sql } from "drizzle-orm"
 import { decryptToString, encryptString } from "./encryption"
 import { hashPassword } from "./password"
@@ -44,8 +38,6 @@ export async function createUser(email: string, username: string, password: stri
     email,
     emailVerified: false,
     registeredTOTP: false,
-    registeredPasskey: false,
-    registeredSecurityKey: false,
     registered2FA: false,
   }
   return user
@@ -108,15 +100,9 @@ export async function getUserFromEmail(email: string): Promise<User | null> {
       username: userTable.username,
       emailVerified: userTable.emailVerified,
       hasTOTP: sql`CASE WHEN ${totpCredentialTable.id} IS NOT NULL THEN 1 ELSE 0 END`.as("hasTOTP"),
-      hasPasskey: sql`CASE WHEN ${passkeyCredentialTable.id} IS NOT NULL THEN 1 ELSE 0 END`.as("hasPasskey"),
-      hasSecurityKey: sql`CASE WHEN ${securityKeyCredentialTable.id} IS NOT NULL THEN 1 ELSE 0 END`.as(
-        "hasSecurityKey"
-      ),
     })
     .from(userTable)
     .leftJoin(totpCredentialTable, eq(userTable.id, totpCredentialTable.userId))
-    .leftJoin(passkeyCredentialTable, eq(userTable.id, passkeyCredentialTable.userId))
-    .leftJoin(securityKeyCredentialTable, eq(userTable.id, securityKeyCredentialTable.userId))
     .where(eq(userTable.email, email))
     .execute()
   const row = result[0]
@@ -129,9 +115,7 @@ export async function getUserFromEmail(email: string): Promise<User | null> {
     username: row.username,
     emailVerified: row.emailVerified,
     registeredTOTP: Boolean(row.hasTOTP),
-    registeredPasskey: Boolean(row.hasPasskey),
-    registeredSecurityKey: Boolean(row.hasSecurityKey),
-    registered2FA: Boolean(row.hasTOTP || row.hasPasskey || row.hasSecurityKey),
+    registered2FA: Boolean(row.hasTOTP),
   }
 
   return user
@@ -139,7 +123,5 @@ export async function getUserFromEmail(email: string): Promise<User | null> {
 
 export interface User extends Omit<DBUser, "recoveryCode" | "passwordHash"> {
   registeredTOTP: boolean
-  registeredSecurityKey: boolean
-  registeredPasskey: boolean
   registered2FA: boolean
 }

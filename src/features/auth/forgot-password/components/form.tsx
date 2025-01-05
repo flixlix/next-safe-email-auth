@@ -28,7 +28,7 @@ export default function ForgotPasswordForm() {
           Send
         </Button>
         {state.message ? <p className="text-sm font-medium text-destructive">{state.message}</p> : null}
-        <Link href="/login" className="ms-auto text-sm font-medium underline underline-offset-4">
+        <Link href="/login" className="mx-auto text-sm font-medium underline underline-offset-4">
           Sign in
         </Link>
       </div>

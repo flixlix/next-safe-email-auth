@@ -7,6 +7,9 @@ const nextConfig: NextConfig = {
       {
         hostname: "dgtzuqphqg23d.cloudfront.net",
       },
+      {
+        hostname: "images.unsplash.com",
+      },
     ],
   },
   experimental: {
