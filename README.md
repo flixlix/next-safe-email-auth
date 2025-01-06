@@ -13,7 +13,7 @@ E-Mail authentication with:
 - Password reset
 - Login throttling and rate limiting
 
-Based on (Lucia Auth Email example)[https://lucia-auth.com/examples/email-password-2fa].
+Based on [Lucia Auth Email example](https://lucia-auth.com/examples/email-password-2fa).
 
 Using:
 - Postgresql
