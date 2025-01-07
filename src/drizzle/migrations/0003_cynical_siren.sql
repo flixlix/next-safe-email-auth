@@ -1,1 +1,0 @@
-ALTER TABLE "next-safe-email-auth_user" ADD COLUMN "recovery_code" text NOT NULL;

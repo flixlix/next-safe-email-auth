@@ -1,5 +1,5 @@
 {
-  "id": "5ca0de13-44fc-4fee-a132-b5529f093b7a",
+  "id": "7fc060e0-6cfb-42dd-a2d7-0999eac625b5",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -44,63 +44,6 @@
         "next-safe-email-auth_email_verification_request_user_id_next-safe-email-auth_user_id_fk": {
           "name": "next-safe-email-auth_email_verification_request_user_id_next-safe-email-auth_user_id_fk",
           "tableFrom": "next-safe-email-auth_email_verification_request",
-          "tableTo": "next-safe-email-auth_user",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.next-safe-email-auth_passkey_credential": {
-      "name": "next-safe-email-auth_passkey_credential",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "bytea",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "user_id": {
-          "name": "user_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "name": {
-          "name": "name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "algorithm": {
-          "name": "algorithm",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "public_key": {
-          "name": "public_key",
-          "type": "bytea",
-          "primaryKey": false,
-          "notNull": true
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "next-safe-email-auth_passkey_credential_user_id_next-safe-email-auth_user_id_fk": {
-          "name": "next-safe-email-auth_passkey_credential_user_id_next-safe-email-auth_user_id_fk",
-          "tableFrom": "next-safe-email-auth_passkey_credential",
           "tableTo": "next-safe-email-auth_user",
           "columnsFrom": [
             "user_id"
@@ -189,63 +132,6 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.next-safe-email-auth_security_key_credential": {
-      "name": "next-safe-email-auth_security_key_credential",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "bytea",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "user_id": {
-          "name": "user_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "name": {
-          "name": "name",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "algorithm": {
-          "name": "algorithm",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "public_key": {
-          "name": "public_key",
-          "type": "bytea",
-          "primaryKey": false,
-          "notNull": true
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "next-safe-email-auth_security_key_credential_user_id_next-safe-email-auth_user_id_fk": {
-          "name": "next-safe-email-auth_security_key_credential_user_id_next-safe-email-auth_user_id_fk",
-          "tableFrom": "next-safe-email-auth_security_key_credential",
-          "tableTo": "next-safe-email-auth_user",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "cascade",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
     "public.next-safe-email-auth_totp_credential": {
       "name": "next-safe-email-auth_totp_credential",
       "schema": "",
@@ -264,7 +150,7 @@
         },
         "key": {
           "name": "key",
-          "type": "bytea",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         }
@@ -378,11 +264,32 @@
           "notNull": true,
           "default": false
         },
-        "recoveryCode": {
-          "name": "recoveryCode",
+        "recovery_code": {
+          "name": "recovery_code",
           "type": "text",
           "primaryKey": false,
           "notNull": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp (3) with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "auth_platform": {
+          "name": "auth_platform",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'email'"
         }
       },
       "indexes": {},

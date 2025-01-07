@@ -1,6 +1,6 @@
 import { generateIdFromEntropySize } from "@/auth"
 import { db } from "@/drizzle/db"
-import { totpCredentialTable, userTable, type User as DBUser } from "@/drizzle/schema"
+import { type InsertUser, totpCredentialTable, userTable } from "@/drizzle/schema"
 import { and, eq, sql } from "drizzle-orm"
 import { decryptToString, encryptString } from "./encryption"
 import { hashPassword } from "./password"
@@ -121,7 +121,7 @@ export async function getUserFromEmail(email: string): Promise<User | null> {
   return user
 }
 
-export interface User extends Omit<DBUser, "recoveryCode" | "passwordHash"> {
+export interface User extends Omit<InsertUser, "recoveryCode" | "passwordHash"> {
   registeredTOTP: boolean
   registered2FA: boolean
 }
