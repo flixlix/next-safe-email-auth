@@ -22,10 +22,5 @@ export default async function Page() {
   if (session.twoFactorVerified) {
     redirect("/reset-password")
   }
-  return (
-    <>
-      <h1>Use your recovery code</h1>
-      <PasswordResetRecoveryCodeForm />
-    </>
-  )
+  return <PasswordResetRecoveryCodeForm />
 }

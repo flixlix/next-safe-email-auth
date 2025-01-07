@@ -1,3 +1,4 @@
+import { env } from "@/data/env/server"
 import { db } from "@/drizzle/db"
 import { userTable } from "@/drizzle/schema"
 import { sha256 } from "@oslojs/crypto/sha2"
@@ -139,7 +140,16 @@ export async function deletePasswordResetSessionTokenCookie(): Promise<void> {
 }
 
 export async function sendPasswordResetEmail(email: string, code: string): Promise<void> {
-  console.log(`To ${email}: Your reset code is ${code}`)
+  await fetch(`${env.DOMAIN}/api/reset-password`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      email,
+      code,
+    }),
+  })
 }
 
 export type PasswordResetSessionValidationResult =

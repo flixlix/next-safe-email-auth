@@ -1,3 +1,4 @@
+import { env } from "@/data/env/server"
 import { db } from "@/drizzle/db"
 import { type EmailVerificationRequest, emailVerificationRequestTable, type User } from "@/drizzle/schema"
 import { encodeBase32LowerCaseNoPadding } from "@oslojs/encoding"
@@ -65,7 +66,16 @@ export async function deleteUserEmailVerificationRequest(userId: User["id"]): Pr
 }
 
 export async function sendVerificationEmail(email: string, code: string): Promise<void> {
-  console.log(`To ${email}: Your verification code is ${code}`)
+  await fetch(`${env.DOMAIN}/api/verification-email`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      email,
+      code,
+    }),
+  })
 }
 
 export async function setEmailVerificationRequestCookie(request: EmailVerificationRequest): Promise<void> {

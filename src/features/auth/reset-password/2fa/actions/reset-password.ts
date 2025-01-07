@@ -52,7 +52,7 @@ export async function resetPasswordAction(_prev: ActionResult, formData: FormDat
   const strongPassword = await verifyPasswordStrength(password)
   if (!strongPassword) {
     return {
-      message: "Weak password",
+      message: "Weak password (according to haveibeenpwned.com)",
     }
   }
   await invalidateUserPasswordResetSessions(passwordResetSession.userId)

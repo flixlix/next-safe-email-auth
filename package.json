@@ -72,6 +72,7 @@
     "react-hook-form": "^7.54.0",
     "react-responsive-masonry": "^2.6.0",
     "recharts": "^2.13.0-alpha.4",
+    "resend": "^4.0.1",
     "sonner": "^1.7.1",
     "tailwind-merge": "^2.5.5",
     "uqr": "^0.1.2",

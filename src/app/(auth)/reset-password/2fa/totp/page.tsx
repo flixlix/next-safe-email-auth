@@ -2,7 +2,6 @@ import { getPasswordReset2FARedirect } from "@/features/auth/lib/server/2fa"
 import { getCurrentPasswordResetSession } from "@/features/auth/lib/server/password-reset"
 import { globalGETRateLimit } from "@/features/auth/lib/server/request"
 import PasswordResetTOTPForm from "@/features/auth/reset-password/2fa/totp/components/form"
-import Link from "next/link"
 import { redirect } from "next/navigation"
 
 export default async function Page() {
@@ -27,12 +26,5 @@ export default async function Page() {
   if (!user.registeredTOTP) {
     redirect(getPasswordReset2FARedirect(user))
   }
-  return (
-    <>
-      <h1>Authenticate with authenticator app</h1>
-      <p>Enter the code from your app.</p>
-      <PasswordResetTOTPForm />
-      <Link href="/reset-password/2fa/recovery-code">Use recovery code</Link>
-    </>
-  )
+  return <PasswordResetTOTPForm />
 }

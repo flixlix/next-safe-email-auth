@@ -14,6 +14,7 @@ const initial2FAVerificationState = {
 export default function TwoFactorVerificationForm() {
   const formRef = useRef<HTMLFormElement>(null)
   const [state, action, pending] = useActionState(verify2FAAction, initial2FAVerificationState)
+
   return (
     <form action={action} ref={formRef}>
       <div className="flex flex-col gap-6">

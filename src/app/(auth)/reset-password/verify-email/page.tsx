@@ -18,11 +18,5 @@ export default async function Page() {
     }
     redirect("/reset-password")
   }
-  return (
-    <>
-      <h1>Verify your email address</h1>
-      <p>We sent an 8-digit code to {session.email}.</p>
-      <PasswordResetEmailVerificationForm />
-    </>
-  )
+  return <PasswordResetEmailVerificationForm session={session} />
 }

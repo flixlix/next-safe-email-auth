@@ -18,10 +18,5 @@ export default async function Page() {
   if (user.registered2FA && !session.twoFactorVerified) {
     redirect("/reset-password/2fa")
   }
-  return (
-    <>
-      <h1>Enter your new password</h1>
-      <PasswordResetForm />
-    </>
-  )
+  return <PasswordResetForm />
 }

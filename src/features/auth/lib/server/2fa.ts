@@ -14,11 +14,6 @@ export async function resetUser2FAWithRecoveryCode(userId: User["id"], recoveryC
       const userResult = await trx.execute(
         sql`SELECT recovery_code FROM "next-safe-email-auth_user" WHERE id = ${userId} FOR UPDATE`
       )
-      console.log(
-        "%csrc/features/auth/lib/server/2fa.ts:17 userResult",
-        "color: white; background-color: #007acc;",
-        userResult
-      )
 
       const userRow = userResult.rows as { recovery_code: string }[]
       if (userRow.length === 0) {
